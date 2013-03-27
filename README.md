@@ -8,10 +8,11 @@ It is a re-implementation of boundary's flake designed to be more easily embedde
 Do note, however, that you should be running only one such service per machine. (or technically,
 per network port MAC address since the MAC address is part of the key)
 
-  # Note: This configuration presumes you have an ethernet device named 'en0'
-  # you will want to update this in mix.exs with your correct ethernet device name.
-  # Feel free to add some config file parsing if you wish. 
-
+```
+**Note:** This configuration presumes you have an ethernet device named 'en0'
+you will want to update this in mix.exs with your correct ethernet device name.
+Feel free to add some config file parsing if you wish. 
+```
 ## Status
 
 Believed to be working correctly. Seems damn fast.
