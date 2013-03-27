@@ -27,7 +27,7 @@ defmodule Flaky.I2l do
   	  end
   	end
 
-	def to_list(int, base) do
+	def to_list(_, _) do
 	    {:error_int_and_base_must_be_integer_and_base_between_2_and_62}
 	end
 

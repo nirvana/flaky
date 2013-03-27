@@ -35,9 +35,13 @@ defmodule Flaky do
 
 	def test do
 		# make a base 10 and base 62
+		IO.puts " Flake, base 10:" <> :gen_server.call(:flaky, :get)
+		IO.puts " Flake, base 62:" <> :gen_server.call(:flaky, {:get, 62})
 		# make 100,000 ids, and count how long it takes.
-
-
+		start = Flaky.time
+		results = Enum.map(1..100000, fn(_) -> :gen_server.call(:flaky, {:get, 62}) end)
+		finish = Flaky.time
+		IO.puts "Time to generate #{Enum.count results} flakes: #{finish-start} milliseconds."
 	end
 
 
