@@ -48,8 +48,10 @@ defmodule Flaky.Server do
   def gen_flake(FlakyState[time: time, node: node, sq: seq], base) do
     IO.puts "Flake: time: #{time} node: #{node} seq: #{seq}"
     <<number::[integer, size(128)]>> = <<time::[integer, size(64)],node::[integer, size(48)],seq::[integer, size(16)]>>
-    IO.puts "Have a flake."
-    list_to_binary(integer_to_list(number, base))
+    IO.puts "Have a flake, converting to list..."
+    nlist = Flaky.I2l.to_list(number, base)
+    IO.puts "Flake is a list now."
+    list_to_binary(nlist)
   end
 
 def handle_cast({ :push, new }, stack) do

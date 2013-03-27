@@ -1,55 +1,55 @@
-defmodule Flaky.I2l
+defmodule Flaky.I2l do
 
 
-# Note, this code was copied, essentially verbatim, from boundaries 
+# Note, this code was copied from boundar/flake/flake_util 
 # version, which apparently has provenance back to riak's code.
 # The code has been translated to elixir, but otherwise unchanged.
 
 ##
-%% n.b. - unique_id_62/0 and friends pulled from riak
-%%
+## n.b. - unique_id_62/0 and friends pulled from riak
+##
 
-%% @spec integer_to_list(Integer :: integer(), Base :: integer()) ->
-%%          string()
-%% @doc Convert an integer to its string representation in the given
-%%      base.  Bases 2-62 are supported.
-to_list(I, 10) ->
-    erlang:integer_to_list(I);
-to_list(I, Base)
-  when is_integer(I),
-       is_integer(Base),
-       Base >= 2,
-       Base =< 1+$Z-$A+10+1+$z-$a ->
-  if
-      I < 0 ->
-	  [$-|to_list(-I, Base, [])];
-      true ->
-	  to_list(I, Base, [])
-  end;
-to_list(I, Base) ->
-    erlang:error(badarg, [I, Base]).
+## @spec integer_to_list(integer :: integer(), Base :: integer()) ->
+##          string()
+## @doc Convert an integer to its string representation in the given
+##      base.  Bases 2-62 are supported.
 
-%% @spec integer_to_list(integer(), integer(), stringing()) -> string()
-to_list(I0, Base, R0) ->
-    D = I0 rem Base,
-    I1 = I0 div Base,
-    R1 =
-	if
-	    D >= 36 ->
-		[D-36+$a|R0];
-	    D >= 10 ->
-		[D-10+$A|R0];
-	    true ->
-		[D+$0|R0]
-	end,
-    if
-      I1 =:= 0 ->
-	    R1;
-	true ->
-	    to_list(I1, Base, R1)
-    end.
+	def to_list(int, 10) do
+    	:erlang.integer_to_list(int)
+	end
 
 
+	def to_list(int, base) 
+		when is_integer(int) and is_integer(base) and base >= 2 and base <= 1+?Z-?A+10+1+?z-?a do
+	  cond do
+	      int < 0 -> [?-|to_list(-int, base, [])]
+	      true -> to_list(int, base, [])
+  	  end
+  	end
 
+	def to_list(int, base) do
+	    {:error_int_and_base_must_be_integer_and_base_between_2_and_62}
+	end
+
+
+## @spec integer_to_list(integer(), integer(), stringing()) -> string()
+	def to_list(int0, base, r0) do
+	    d = rem(int0, base)
+	    int1 = div(int0, base)
+	    r1 = cond do
+		    d >= 36 -> 
+		    	[d-36+?a|r0]
+		    d >= 10 -> 
+		    	[d-10+?A|r0]
+		    true -> 
+		    	[d+?0|r0]
+		end
+	    cond do
+	    	int1 === 0 ->
+		    	r1;
+			true ->
+		    	to_list(int1, base, r1)
+	    end
+	end
 
 end

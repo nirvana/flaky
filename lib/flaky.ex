@@ -12,6 +12,7 @@ defmodule Flaky do
 	def start(_type, device) do
 		#Need FlakeState to startup.  State needs the MAC address & current time
 		state = FlakyState.new(time: Flaky.time, node: Flaky.mac(device))
+		IO.puts "Flaky.start - worker/node id is: #{state.node}"
 		Flaky.Supervisor.start_link(state)
 	end
 
@@ -21,17 +22,23 @@ defmodule Flaky do
 	end
 
 	def mac(name) do
-		IO.puts "getting node id"
+		#name = 'en0'
 		{:ok, addresses} = :inet.getifaddrs()
 		proplist = :proplists.get_value(name, addresses)
 		hwaddr = :proplists.get_value(:hwaddr, proplist)
 		<<worker::[integer, size(48)]>> = list_to_binary(hwaddr)
-		IO.puts "worker is: #{worker}"
 		worker
 	end
 # hw_addr_to_int(HwAddr) ->
 #    <<WorkerId:48/integer>> = erlang:list_to_binary(HwAddr),
 #    WorkerId.
+
+	def test do
+		# make a base 10 and base 62
+		# make 100,000 ids, and count how long it takes.
+
+
+	end
 
 
 end
