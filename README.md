@@ -35,3 +35,9 @@ iex(4)> :gen_server.call(:flaky, :get)
 iex(5)> :gen_server.call(:flaky, {:get, 62})
 "8VxXXbGSmDATluESbg"
 ```
+
+## Further Reading
+
+See the blog post: http://boundary.com/blog/2012/01/12/flake-a-decentralized-k-ordered-unique-id-generator-in-erlang/
+
+... and the erlang version (which has more details):  https://github.com/boundary/flake
