@@ -16,6 +16,7 @@ Feel free to add some config file parsing if you wish.
 ## Status
 
 Believed to be working correctly. Seems damn fast.
+The original Flake is used in production and stable, but this re-implementation, while trying to follow their methods exactly may have errors. I would recommend testing this or at least reviewing the code before putting into production!
 
 ## API
 
