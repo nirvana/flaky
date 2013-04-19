@@ -11,7 +11,9 @@ per network port MAC address since the MAC address is part of the key)
 ```
 **Note:** This configuration presumes you have an ethernet device named 'en0'
 you will want to update this in mix.exs with your correct ethernet device name.
-Feel free to add some config file parsing if you wish. 
+
+Feel free to add some config file parsing if you wish. Preferably in Elixir, maybe using exconfig?
+I would be happy to recieve such a pull request!
 ```
 ## Status
 
