@@ -1,4 +1,3 @@
-
 # Node is the id of this node (based on MAC address)
 # Time is the stateful time (to tell if we're called more than once during time resolution period)
 # SQ is the sequence number which is incremented so that multiple calls in a time slice will generate unique ids.
@@ -17,7 +16,7 @@ defmodule Flaky do
 	end
 
 	def time do
-		{mega_seconds, seconds, micro_seconds} = :erlang.now()
+		{mega_seconds, seconds, micro_seconds} = :os.timestamp()
 		1000000000*mega_seconds + seconds*1000 + :erlang.trunc(micro_seconds/1000)
 	end
 
