@@ -13,7 +13,8 @@ defmodule Flaky.Mixfile do
   
   # Configuration for the OTP application
   def application do
-    [registered: [:flaky], mod: { Flaky, 'eth0' }]
+    [registered: [:flaky], mod: { Flaky, 'eth0' },
+     applications: [:config]]
   end
 
   # Returns the list of dependencies in the format:
