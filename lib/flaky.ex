@@ -25,7 +25,7 @@ defmodule Flaky do
 		{:ok, addresses} = :inet.getifaddrs()
 		proplist = :proplists.get_value(name, addresses)
 		hwaddr = :proplists.get_value(:hwaddr, proplist)
-		<<worker::[integer, size(48)]>> = list_to_binary(hwaddr)
+		<<worker::[integer, size(48)]>> = :erlang.list_to_binary(hwaddr)
 		worker
 	end
 # hw_addr_to_int(HwAddr) ->
