@@ -3,7 +3,7 @@ defmodule Flaky.Mixfile do
 
   def project do
     [ app: :flaky,
-      version: "0.1",
+      version: "0.0.1",
       deps: deps ]
   end
 
@@ -14,7 +14,6 @@ defmodule Flaky.Mixfile do
   # Configuration for the OTP application
   def application do
     [registered: [:flaky], mod: { Flaky, 'eth0' },
-     applications: [:config]]
   end
 
   # Returns the list of dependencies in the format:

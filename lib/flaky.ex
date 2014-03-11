@@ -21,7 +21,6 @@ defmodule Flaky do
 	end
 
 	def mac(name) do
-    name = Config.Server.get_as_list(:hardware, :nic, name)
 		{:ok, addresses} = :inet.getifaddrs()
 		proplist = :proplists.get_value(name, addresses)
 		hwaddr = :proplists.get_value(:hwaddr, proplist)
