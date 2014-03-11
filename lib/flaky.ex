@@ -22,6 +22,7 @@ defmodule Flaky do
 
 	def mac(name) do
 		{:ok, addresses} = :inet.getifaddrs()
+		IO.puts "#{inspect addresses}"
 		proplist = :proplists.get_value(name, addresses)
 		hwaddr = :proplists.get_value(:hwaddr, proplist)
 		<<worker::[integer, size(48)]>> = :erlang.list_to_binary(hwaddr)
