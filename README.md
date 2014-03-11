@@ -22,6 +22,11 @@ The original Flake is used in production and stable, but this re-implementation,
 
 ## API
 
+```
+	Flake.numeric => 25725046379886392965847027351552
+	Flake.alpha => 8hcWWAPPrayb5DuwML
+```
+
 As an OTP app, it responds to gen_server calls, for either :get or {:get, Base}  The former will
 return flakes in base 10, and the latter in whatever base you pass it, between 2 and 62.
 

@@ -22,7 +22,7 @@ defmodule Flaky do
 
 	def mac(name) do
 		{:ok, addresses} = :inet.getifaddrs()
-		IO.puts "#{inspect addresses}"
+		# IO.puts "#{inspect addresses}"
 		proplist = :proplists.get_value(name, addresses)
 		hwaddr = :proplists.get_value(:hwaddr, proplist)
 		<<worker::[integer, size(48)]>> = :erlang.list_to_binary(hwaddr)
@@ -43,5 +43,12 @@ defmodule Flaky do
 		IO.puts "Time to generate #{Enum.count results} flakes: #{finish-start} milliseconds."
 	end
 
+	def numeric do
+		:gen_server.call(:flaky, :get)
+	end
+
+	def alpha do
+		:gen_server.call(:flaky, {:get, 62})
+	end
 
 end
