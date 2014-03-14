@@ -51,7 +51,7 @@ defmodule Flaky.Server do
     #IO.puts "Have a flake, converting to list..."
     nlist = Flaky.I2l.to_list(number, base)
     #IO.puts "Flake is a list now."
-    list_to_binary(nlist)
+    :erlang.list_to_binary(nlist)
   end
 
 def handle_cast({ :push, new }, stack) do

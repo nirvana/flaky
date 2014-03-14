@@ -1,4 +1,3 @@
-
 # Node is the id of this node (based on MAC address)
 # Time is the stateful time (to tell if we're called more than once during time resolution period)
 # SQ is the sequence number which is incremented so that multiple calls in a time slice will generate unique ids.
@@ -17,16 +16,16 @@ defmodule Flaky do
 	end
 
 	def time do
-		{mega_seconds, seconds, micro_seconds} = :erlang.now()
+		{mega_seconds, seconds, micro_seconds} = :os.timestamp()
 		1000000000*mega_seconds + seconds*1000 + :erlang.trunc(micro_seconds/1000)
 	end
 
 	def mac(name) do
-		#name = 'en0'
 		{:ok, addresses} = :inet.getifaddrs()
+		# IO.puts "#{inspect addresses}"
 		proplist = :proplists.get_value(name, addresses)
 		hwaddr = :proplists.get_value(:hwaddr, proplist)
-		<<worker::[integer, size(48)]>> = list_to_binary(hwaddr)
+		<<worker::[integer, size(48)]>> = :erlang.list_to_binary(hwaddr)
 		worker
 	end
 # hw_addr_to_int(HwAddr) ->
@@ -44,5 +43,12 @@ defmodule Flaky do
 		IO.puts "Time to generate #{Enum.count results} flakes: #{finish-start} milliseconds."
 	end
 
+	def numeric do
+		:gen_server.call(:flaky, :get)
+	end
+
+	def alpha do
+		:gen_server.call(:flaky, {:get, 62})
+	end
 
 end
