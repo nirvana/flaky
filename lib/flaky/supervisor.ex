@@ -1,15 +1,15 @@
 defmodule Flaky.Supervisor do
   use Supervisor.Behaviour
 
-  def start_link(state) do
-    :supervisor.start_link(__MODULE__, state)
+  def start_link do
+    :supervisor.start_link(__MODULE__, [])
   end
 
-  def init(state) do
+  def init([]) do
     children = [
       # Define workers and child supervisors to be supervised
       # worker(Flaky.Worker, [])
-      worker(Flaky.Server, [state])
+      worker(Flaky.Server, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/Supervisor.Behaviour.html

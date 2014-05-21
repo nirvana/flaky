@@ -1,61 +1,75 @@
 defmodule Flaky.Server do
   use GenServer.Behaviour
 
-  def start_link(state) do
-      :gen_server.start_link({ :local, :flaky }, __MODULE__, state, [])
+  def start_link do
+    :gen_server.start_link({ :local, :flaky }, __MODULE__, [], [])
   end
 
-  def init(state) do
-    { :ok, state }
+  def init(_opts) do
+    {:ok, %{time: time, node: mac_address}}
   end
 
-
-#defrecord FlakyState, node: nil, time: 0, sq: 0
-
-  def handle_call(:get, _from, state) do
-    { flake, new_state} = get(Flaky.time, state, 10)
-    { :reply, flake, new_state }
+  def handle_call(:generate, _from, state) do
+    {flake, new_state} = generate(time, state)
+    {:reply, flake, new_state}
   end
 
-  def handle_call({:get, base}, _from, state) do
-    { flake, new_state} = get(Flaky.time, state, base)
-    { :reply, flake, new_state }
+  def handle_call({:generate, base}, _from, state) do
+    {flake, new_state} = generate(time, state, base)
+    {:reply, flake, new_state}
   end
 
-
-  # Matches when the calling time is the same as the state time. Incr. sq
-  def get(time, FlakyState[time: time, node: node, sq: seq], base) do
-    #IO.puts "Matches when the calling time is the same as the state time. Incr. sq"
-    #IO.puts "Making new state"
-    new_state = FlakyState.new(time: time, node: node, sq: (seq+1))
-    #IO.puts "Generating flake"
+  def generate(time, %{time: time, node: node, seq: seq}, base \\ nil) do
+    new_state = %{time: time, node: node, seq: (seq+1)}
     {gen_flake(new_state, base), new_state}
   end
 
-  # Matches when the times are different, reset sq
-  def get(newtime, FlakyState[time: time, node: node], base)  when newtime > time do
-    #IO.puts "Matches when the times are different, reset sq"
-    new_state = FlakyState.new(time: newtime, node: node, sq: 0)
-    #IO.puts "Generating flake"
+  # Matches when the times are different, reset seq
+  def generate(newtime, %{time: time, node: node}, base) when newtime > time do
+    new_state = %{time: newtime, node: node, seq: 0}
     {gen_flake(new_state, base), new_state}
-  end 
+  end
 
   # Error when clock is running backwards
-  def get(newtime, FlakyState[time: time], _) when newtime < time do
+  def generate(newtime, %{time: time}, _) when newtime < time do
     {:error, :clock_running_backwards}
   end
 
-  def gen_flake(FlakyState[time: time, node: node, sq: seq], base) do
-    #IO.puts "Flake: time: #{time} node: #{node} seq: #{seq}"
-    <<number::[integer, size(128)]>> = <<time::[integer, size(64)],node::[integer, size(48)],seq::[integer, size(16)]>>
-    #IO.puts "Have a flake, converting to list..."
-    nlist = Flaky.I2l.to_list(number, base)
-    #IO.puts "Flake is a list now."
-    :erlang.list_to_binary(nlist)
+  def gen_flake(%{time: time, node: node, seq: seq}, base) do
+    flake = <<time::[integer, size(64)],node::[integer, size(48)],seq::[integer, size(16)]>>
+    if nil?(base) do
+      flake
+    else
+      <<number::[integer, size(128)]>> = flake
+      nlist = Flaky.I2l.to_list(number, base)
+      :erlang.list_to_binary(nlist)
+    end
   end
 
-def handle_cast({ :push, new }, stack) do
+  def handle_cast({ :push, new }, stack) do
     { :noreply, [new|stack] }
+  end
+
+  defp time do
+    {mega_seconds, seconds, micro_seconds} = :os.timestamp
+    1000000000*mega_seconds + seconds*1000 + :erlang.trunc(micro_seconds/1000)
+  end
+
+  defp mac_address do
+    {:ok, addresses} = :inet.getifaddrs
+
+    {iface, _} =
+      Enum.find addresses, fn({_iface, params}) ->
+        if Enum.member?(params[:flags], :broadcast) and Enum.member?(params[:flags], :multicast) do
+          not nil?(params[:hwaddr]) and Enum.max(params[:hwaddr]) > 0
+        end
+      end
+
+    proplist = :proplists.get_value(iface, addresses)
+    hwaddr = :proplists.get_value(:hwaddr, proplist)
+
+    <<worker::[integer, size(48)]>> = :erlang.list_to_binary(hwaddr)
+    worker
   end
 
 end
