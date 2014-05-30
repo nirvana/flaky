@@ -5,12 +5,8 @@ defmodule Flaky do
     Flaky.Supervisor.start_link
   end
 
-  def generate do
-    :gen_server.call(:flaky, :generate)
-  end
-
   def generate(base) do
-    :gen_server.call(:flaky, {:generate, base})
+    Flaky.Server.generate(base)
   end
 
 end
