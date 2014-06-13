@@ -3,8 +3,8 @@ defmodule Flaky.Mixfile do
 
   def project do
     [ app: :flaky,
-      version: "0.0.2",
-      elixir: "~> 0.13.3",
+      version: "0.0.3",
+      elixir: "~> 0.14.0",
       deps: deps ]
   end
 
