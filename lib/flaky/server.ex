@@ -25,11 +25,11 @@ defmodule Flaky.Server do
   end
 
   defp gen_flake(%{time: time, node: node, seq: seq}, base) do
-    flake = <<time::[integer, size(64)], node::[integer, size(48)], seq::[integer, size(16)]>>
+    flake = <<time::integer-size(64), node::integer-size(48), seq::integer-size(16)>>
     case base do
       nil -> flake
       _ ->
-        <<number::[integer, size(128)]>> = flake
+        <<number::integer-size(128)>> = flake
         Flaky.I2l.to_list(number, base)
         |> List.to_string
     end
@@ -54,7 +54,7 @@ defmodule Flaky.Server do
     proplist = :proplists.get_value(iface, addresses)
     hwaddr = :proplists.get_value(:hwaddr, proplist)
 
-    <<worker::[integer, size(48)]>> = :erlang.list_to_binary(hwaddr)
+    <<worker::integer-size(48)>> = :erlang.list_to_binary(hwaddr)
     worker
   end
 
