@@ -50,7 +50,7 @@ defmodule Flaky.Server do
     { :noreply, [new|stack] }
   end
 
-  defp time do
+  def time do
     {mega_seconds, seconds, micro_seconds} = :os.timestamp
     1000000000*mega_seconds + seconds*1000 + :erlang.trunc(micro_seconds/1000)
   end
