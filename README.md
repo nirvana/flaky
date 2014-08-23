@@ -4,7 +4,7 @@ FLAKY
 Flake implemented in Elixir.
 
 Flaky is an OTP app that issues unique, ordered keys as a service.  
-It is a re-implementation of boundary's flake designed to be more easily embedded in projects. 
+It is a re-implementation of boundary's flake designed to be more easily embedded in projects.
 Do note, however, that you should be running only one such service per machine. (or technically,
 per network port MAC address since the MAC address is part of the key)
 
@@ -22,8 +22,14 @@ The original Flake is used in production and stable, but this re-implementation,
 
 ## API
 
-As an OTP app, it responds to gen_server calls, for either :get or {:get, Base}  The former will
-return flakes in base 10, and the latter in whatever base you pass it, between 2 and 62.
+```
+	Flaky.numeric => 25725046379886392965847027351552
+	Flaky.alpha => 8hcWWAPPrayb5DuwML
+```
+
+As an OTP app, it responds to gen_server calls, for either :generate or {:generate, Base}  
+The former will return flakes in base 10, and the latter in whatever base you pass it,
+between 2 and 62.
 
 ## Example
 
@@ -33,9 +39,9 @@ iex(3)> Flaky.test
  Flake, base 62:8VxXJXgBJFc4b9Ygd7
 Time to generate 100000 flakes: 1074 milliseconds.
 :ok
-iex(4)> :gen_server.call(:flaky, :get)
+iex(4)> :gen_server.call(:flaky, :generate)
 "25169137199058260165889939996672"
-iex(5)> :gen_server.call(:flaky, {:get, 62})
+iex(5)> :gen_server.call(:flaky, {:generate, 62})
 "8VxXXbGSmDATluESbg"
 ```
 
