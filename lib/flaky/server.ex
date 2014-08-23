@@ -35,15 +35,7 @@ defmodule Flaky.Server do
     end
   end
 
-<<<<<<< HEAD
-  def handle_cast({ :push, new }, stack) do
-    { :noreply, [new|stack] }
-  end
-
   def time do
-=======
-  defp time do
->>>>>>> 1ae5dcdfa3ed0dc5b78941a1fd8c6f1b6487b5b7
     {mega_seconds, seconds, micro_seconds} = :os.timestamp
     1_000_000_000*mega_seconds + seconds*1_000 + :erlang.trunc(micro_seconds/1_000)
   end
