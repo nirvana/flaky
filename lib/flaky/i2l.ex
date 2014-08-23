@@ -5,7 +5,7 @@ defmodule Flaky.I2l do
   end
 
   def to_list(int, base)
-    when is_integer(int) and is_integer(base) and base >= 2 and base <= 62 do
+    when is_integer(int) and is_integer(base) and base in 2..62 do
     cond do
       int < 0 ->
         [?- | to_list(-int, base, [])]
@@ -15,7 +15,7 @@ defmodule Flaky.I2l do
   end
 
   def to_list(_, _) do
-    {:error_int_and_base_must_be_integer_and_base_between_2_and_62}
+    raise ArgumentError, "base must be between 2 and 62"
   end
 
   def to_list(int0, base, r0) do
