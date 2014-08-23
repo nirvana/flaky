@@ -4,7 +4,7 @@ defmodule Flaky.Mixfile do
   def project do
     [ app: :flaky,
       version: "0.0.1",
-      elixir: "~> 0.13",
+      elixir: "~> 0.15.1",
       deps: deps ]
   end
 

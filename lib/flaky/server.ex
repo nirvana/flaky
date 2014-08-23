@@ -1,5 +1,5 @@
 defmodule Flaky.Server do
-  use GenServer.Behaviour
+  use GenServer
 
   def start_link do
     :gen_server.start_link({ :local, :flaky }, __MODULE__, [], [])
@@ -19,7 +19,9 @@ defmodule Flaky.Server do
     {:reply, flake, new_state}
   end
 
-  def generate(time, %{time: time, node: node, seq: seq}, base \\ nil) do
+  def generate(time, map \\ %{}, base \\ nil)
+
+  def generate(time, %{time: time, node: node, seq: seq}, base) do
     new_state = %{time: time, node: node, seq: (seq+1)}
     {gen_flake(new_state, base), new_state}
   end
@@ -36,11 +38,11 @@ defmodule Flaky.Server do
   end
 
   def gen_flake(%{time: time, node: node, seq: seq}, base) do
-    flake = <<time::[integer, size(64)],node::[integer, size(48)],seq::[integer, size(16)]>>
+    flake = <<time::integer-size(64),node::integer-size(48),seq::integer-size(16)>>
     if nil?(base) do
       flake
     else
-      <<number::[integer, size(128)]>> = flake
+      <<number::integer-size(128)>> = flake
       nlist = Flaky.I2l.to_list(number, base)
       :erlang.list_to_binary(nlist)
     end
@@ -68,7 +70,7 @@ defmodule Flaky.Server do
     proplist = :proplists.get_value(iface, addresses)
     hwaddr = :proplists.get_value(:hwaddr, proplist)
 
-    <<worker::[integer, size(48)]>> = :erlang.list_to_binary(hwaddr)
+    <<worker::integer-size(48)>> = :erlang.list_to_binary(hwaddr)
     worker
   end
 
