@@ -8,21 +8,12 @@ It is a re-implementation of boundary's flake designed to be more easily embedde
 Do note, however, that you should be running only one such service per machine. (or technically,
 per network port MAC address since the MAC address is part of the key)
 
-```
-**Note:** This configuration presumes you have an ethernet device named 'en0'
-you will want to update this in mix.exs with your correct ethernet device name.
-
-Feel free to add some config file parsing if you wish. Preferably in Elixir, maybe using exconfig?
-I would be happy to recieve such a pull request!
-```
-## Status
-
-Believed to be working correctly. Seems damn fast.
-The original Flake is used in production and stable, but this re-implementation, while trying to follow their methods exactly may have errors. I would recommend testing this or at least reviewing the code before putting into production!
-
 ## API
-
 ```
+	# generate(base) => returns a flake in the given base
+	Flaky.generate(16) => 1480497347FB8F6B1118F650000
+	
+	# numeric() and alpha() are conveniences for base 10 and 62.
 	Flaky.numeric => 25725046379886392965847027351552
 	Flaky.alpha => 8hcWWAPPrayb5DuwML
 ```
@@ -34,15 +25,23 @@ between 2 and 62.
 ## Example
 
 ```
-iex(3)> Flaky.test
- Flake, base 10:25169134539683400779552431276032
- Flake, base 62:8VxXJXgBJFc4b9Ygd7
-Time to generate 100000 flakes: 1074 milliseconds.
-:ok
-iex(4)> :gen_server.call(:flaky, :generate)
-"25169137199058260165889939996672"
-iex(5)> :gen_server.call(:flaky, {:generate, 62})
-"8VxXXbGSmDATluESbg"
+$ iex -S mix
+Erlang/OTP 17 [erts-6.1] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:10] [hipe] [kernel-poll:false] [dtrace]
+
+Interactive Elixir (0.15.1) - press Ctrl+C to exit (type h() ENTER for help)
+iex(1)> Flaky.generate(5)
+"424122044124414241030213141324120301211234042"
+iex(2)> Flaky.generate(10)
+"25988255635718314112604438855680"
+iex(3)> Flaky.generate(16)
+"1480495539AB8F6B1118F650000"
+iex(4)> Flaky.generate(62)
+"8n8q3r3d3LjEzMdEoa"
+iex(5)> Flaky.alpha
+"8n8q4QNhihaEXlIGSu"
+iex(6)> Flaky.numeric
+"25988256081889713023417363791872"
+iex(7)>
 ```
 
 ## Further Reading

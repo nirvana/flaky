@@ -9,11 +9,11 @@ defmodule Flaky do
   end
 
 	def numeric do
- 		:gen_server.call(:flaky, {:generate, 10})
+    Flaky.Server.generate(10)
 	end
 
 	def alpha do
-		:gen_server.call(:flaky, {:generate, 62})
+    Flaky.Server.generate(62)
 	end
 
 end
