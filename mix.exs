@@ -3,18 +3,17 @@ defmodule Flaky.Mixfile do
 
   def project do
     [ app: :flaky,
-      version: "0.0.5",
-      elixir: "~> 0.15.0",
+      version: "0.0.6",
+      elixir: "~> 1.0.2",
       deps: deps ]
   end
 
   # Configuration for the OTP application
   def application do
     [
-      registered: [:flaky],
-      mod: { Flaky, [] },
-      applications: []
-  ]
+      applications: [],
+      mod: { Flaky, [] }
+    ]
   end
 
   # Returns the list of dependencies in the format:
